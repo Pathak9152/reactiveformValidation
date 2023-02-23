@@ -6,6 +6,17 @@
     width: 48rem;
     padding-top: 1rem;
 }
+.availability{
+    display: flex;
+    
+}
+.nestedinput{
+    width:23rem;
+    margin-left:1rem;
+    padding-top:1rem;
+    padding-bottom: 1rem;
+    }
+    
 input{
     /* width: 48rem; */
     border-left:none;
@@ -20,11 +31,35 @@ input{
    display: flex; 
    padding-top: 2rem;
 }
+.textarea{
+    width: 48rem;
+    resize:none;
+    height:3rem;
+    border: 2px solid black;
+}
+.avail{
+    width:23rem;
+    padding-top:1rem;
+    padding-bottom: 1rem; 
+}
+.dropdown_input{
+    position:relative;
+    margin-top:1rem;
+}
 .datepickers>div>input{
     width: 22rem;
 }
 .maxdiscount{
-    width:23rem;
+    width:24rem;
+    position: relative;
+    top: 1rem;
+    padding-left: .5rem;
+}
+.max>input{
+width:23rem;
+margin-left:1rem;
+padding-top:1rem;
+padding-bottom: 1rem;
 }
 .rulesbox{
     margin-top: 1rem;
@@ -32,10 +67,24 @@ input{
 .rulesbox >div{
     display:flex;
 }
-.rulesbox >article>div>input{
+.limits{
+    display: flex;
+}
+.discount{
+    display: flex;
+}
+.discount>div>input{
+    
+        width:23rem;
+        margin-left:1rem;
+        padding-top:1rem;
+        padding-bottom: 1rem;
+}
+.childinput>input{
     width:23rem;
     margin-left:1rem;
     padding-top:1rem;
+    padding-bottom: 1rem;
 }
 .ruleheader{
     width:48rem;
@@ -45,12 +94,36 @@ input{
     padding-left: 1rem;
     font-size: medium;
 }
-/* ================================ */
+.warning{
+    color: red;
+    padding-left: 1rem;
+    /* padding-top: 1rem; */
+}
+.save-btn{
+    width: 5rem;
+    background: #2525aa;
+    color: white;
+    border: none;
+    height: 1.5rem;
+    border-radius: 0.5rem;
+}
+.add-more{
+    margin-left: 42rem;
+    color:#4b8fba;
+    display: flex;
+    font-weight: 500;
+
+}
+.add-more>mat-icon{
+    color: #4b8fba;
+    margin-right: 1rem;
+    position: relative;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 600px) {
     .container{
-        /* border: 1px solid black; */
         padding-left:0rem;
-        /* padding-right:6rem; */
     
     }
 }

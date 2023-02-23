@@ -1,5 +1,5 @@
 <!-- <div class="container"> -->
-<mat-card class="container" [formGroup]="couponForm">
+<mat-card class="container" [formGroup]="couponForm" (submit)="saveForm()" #myform="ngForm">
   <mat-card-content>One Digital Entertainment</mat-card-content>
   <div>
     <mat-form-field appearance="fill" class="userinputs">
@@ -10,12 +10,15 @@
         (selectionChange)="select($event.value, 'coupon_type')"
         ngDefaultControl
         [value]="couponForm.value.coupon_type"
+        required
       >
-        <mat-option *ngFor="let item of coupon_type" [value]="item">
+        <mat-option *ngFor="let item of coupon_types" [value]="item">
           {{ item }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div *ngIf="coupon_type.errors?.['required'] && coupon_type.touched " class="warning">Required Field</div>
+
   </div>
   <div class="userinputs">
     <input
@@ -23,7 +26,10 @@
       placeholder="Coupon Code *"
       class="couponcode"
       formControlName="coupon_code"
+      maxlength="15"
+      
     />
+    <div *ngIf="coupon_code.errors?.['required'] && coupon_code.touched" class="warning">Required Field</div>
   </div>
   <div class="datepickers">
     <div>
@@ -53,86 +59,113 @@
       <mat-datepicker #picker1></mat-datepicker>
     </div>
   </div>
-  <div class="userinputs">
-    <mat-form-field appearance="fill">
-      <mat-label>Coupon Availability</mat-label>
-      <mat-select
-        [disabled]="false"
-        formControlName="is_unlimited"
-        (selectionChange)="select($event.value, 'availability')"
-        [value]="couponForm.value.is_unlimited"
-        ngDefaultControl
-      >
-        <mat-option *ngFor="let item of availability" [value]="item">
-          {{ item }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="availability">
+    <div>
+      <mat-form-field appearance="fill" class="avail">
+        <mat-label>Coupon Availability</mat-label>
+        <mat-select
+          [disabled]="false"
+          formControlName="is_unlimited"
+          (selectionChange)="select($event.value, 'availability')"
+          [value]="availability"
+          ngDefaultControl
+        >
+          <mat-option *ngFor="let item of availArray" [value]="item">
+            {{ item }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="is_unlimited.errors?.['required'] && is_unlimited.touched" class="warning">Required Field</div>
+     
+    </div>
+    <div *ngIf="availability==='limited'">
+      <input  placeholder="Enter Coupon Count" type="text" class="nestedinput dropdown_input" formControlName="coupon_count"/>
+          <div *ngIf="coupon_count.errors?.['required'] && coupon_count.touched" class="warning">Please Enter only numbers</div>
+    </div>
+  </div>
+  <div class="tnc">
+<textarea formControlName="tnc" class="textarea" placeholder="type something ..."></textarea>
   </div>
   <div class="userinputs">
     <mat-form-field appearance="fill" class="userinputs">
       <mat-label>Coupon Status</mat-label>
       <mat-select
         [disabled]="false"
-        formControlName="couponstatus"
+        formControlName="coupon_status"
         (selectionChange)="select($event.value, 'couponstatus')"
-        [value]="couponForm.value.couponstatus"
+        [value]="couponForm.value.coupon_status"
         ngDefaultControl
       >
-        <mat-option *ngFor="let item of coupon_type" [value]="item">
+        <mat-option *ngFor="let item of statusArr" [value]="item">
           {{ item }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <div *ngIf="coupon_status.errors?.['required'] && coupon_status.touched" class="warning">Required Field</div>
   </div>
   <!-- rules container here  -->
-  <span>COUPON RULES :</span>
+  <div>COUPON RULES :</div>
   <div>
-    <section class="rulesbox">
-      <!-- *ngFor="let item of couponForm.get('controls'); let i= index" -->
-      <!-- [formGroupName]="i" -->
-
-      <article>
-        <div>
-          <div class="ruleheader">RULE 1</div>
+    <section class="rulesbox" formArrayName="rules">
+      <article *ngFor="let rule of ruleArray['controls']; let i=index">
+        <div [formGroupName]="i">
+          <div class="ruleheader">RULE {{i+1}}</div>
           <div class="limits">
+           <div class="childinput">
             <input
-              type="number"
-              placeholder="Min amount"
-              formControlName="min_amount"
-            />
+            type="text"
+            placeholder="Min amount"
+            formControlName="min_amount"
+          />
+  <div *ngIf="rule.get('min_amount')?.errors?.required && rule.get('min_amount')?.touched" class="warning">Required Field</div>
+  <div *ngIf="rule.get('min_amount')?.errors?.pattern " class="warning">Please Enter only numbers</div>
+           </div>
+<div class="childinput">
             <input
-              type="number"
+              type="text"
               placeholder="Max amount"
               formControlName="max_amount"
             />
+            <div *ngIf="rule.get('max_amount')?.errors?.required && rule.get('max_amount')?.touched" class="warning">Required Field</div>
+    <div *ngIf="rule.get('max_amount')?.errors?.pattern " class="warning">Please Enter only numbers</div>
           </div>
+        </div>
           <div class="discount">
-            <mat-form-field appearance="fill" class="maxdiscount">
+            <div><mat-form-field appearance="fill" class="maxdiscount">
               <mat-label>Discount Type</mat-label>
               <mat-select
                 [disabled]="false"
                 (selectionChange)="select($event.value, 'discount_type')"
                 ngDefaultControl
+                formControlName="discount_type"
               >
                 <mat-option *ngFor="let item of discountArray" [value]="item">
                   {{ item }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <input placeholder="discount" />
+            <div *ngIf="rule.get('discount_type')?.errors?.required && rule.get('discount_type')?.touched" class="warning">Required Field</div></div>
+
+           <div>
+            <input placeholder="discount" formControlName="discount" class="dropdown_input"/>
+            <div *ngIf="rule.get('discount')?.errors?.required && rule.get('discount')?.touched" class="warning">Required Field</div>
+    <div *ngIf="rule.get('discount')?.errors?.pattern " class="warning">Please Enter only numbers</div>
           </div>
+           </div>
 
           <div class="max">
-            <input type="number" placeholder="Max discount" />
+            <input  placeholder="Max discount" type="text" formControlName="max_discount"/>
+            <div *ngIf="rule.get('max_discount')?.errors?.pattern " class="warning">Please Enter only numbers</div>
           </div>
         </div>
       </article>
     </section>
+<div>
+  <div type="button" (click)="addMore()" class="add-more"><mat-icon>add_circle</mat-icon> <div>Add more</div></div>
+</div>
+
   </div>
+  <button type="submit" class="save-btn" (click)="saveForm()"matbutton>Save</button>
+
 </mat-card>
 
-<button (click)="saveForm()" matbutton>Save</button>
-<br />
-
-<!-- <mat-slide-toggle>Toggle me!</mat-slide-toggle> -->
